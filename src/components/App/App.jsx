@@ -1,14 +1,25 @@
-
+import Axios from "axios";
+import { useState, useEffect } from "react";
+import GalleryList from "../GalleryList/GalleryList";
 function App() {
+  useEffect(() => {
+    getGallery()
+  }, [])
+  const [gallery, setGallery] = useState([])
+  const getGallery = () => {
+    Axios.get(`/api/gallery`)
+    .then(res => {setGallery(res.data)})
+    .catch(err => {console.log(`Error in GET/api/gallery!`, err)})
+  }
+
     return (
-      <div>
+      <div data-testid="app">
         <header>
           <h1>React Gallery</h1>
         </header>
 
         <p>The gallery goes here!</p>
-        <img src="images/goat_small.jpg"/>
-        <img src="images/goat_stache.png"/>
+        <GalleryList gallery={gallery} />
       </div>
     );
 }
