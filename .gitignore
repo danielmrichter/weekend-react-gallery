@@ -1,6 +1,7 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 # cypress Snapshots
 /cypress/screenshots
+/cypress
 
 # dependencies
 /node_modules
