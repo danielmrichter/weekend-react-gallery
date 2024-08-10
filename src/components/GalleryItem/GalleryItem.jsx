@@ -11,16 +11,20 @@ export default function GalleryItem({ item, getGallery }) {
     return (
         <>
             {flipImage ?
-                <div>
-                    <p onClick={() => setFlipImage(!flipImage)}>{item.description}</p>
+                <div data-testid="galleryItem">
+                    <p>{item.title}</p>
+                    <p onClick={() => setFlipImage(!flipImage)}
+                        data-testid="toggle">{item.description}</p>
                     <p>Likes: {item.likes}</p>
-                    <button onClick={handleLikeButton}>Heart</button>
-                </div> : <div>
-                    <img 
-                    onClick={() => setFlipImage(!flipImage)}
-                    src={item.url} />
+                    <button data-testid="like" onClick={handleLikeButton}>Heart</button>
+                </div> : <div data-testid="galleryItem">
+                    <p>{item.title}</p>
+                    <img
+                        onClick={() => setFlipImage(!flipImage)}
+                        src={item.url}
+                        data-testid="toggle" />
                     <p>Likes: {item.likes}</p>
-                    <button onClick={handleLikeButton}>Heart</button>
+                    <button data-testid="like" onClick={handleLikeButton}>Heart</button>
                 </div>}
         </>
     )
