@@ -27,4 +27,18 @@ router.get('/', (req, res) => {
       res.sendStatus(500)})
 });
 
+// POST /api/gallery
+router.post(`/`, (req, res) => {
+  const sqlText = `INSERT INTO "gallery"
+  ("title", "description", "url")
+  VALUES
+  ($1, $2, $3)`
+  const sqlValues = [req.body.title, req.body.description, req.body.url]
+  pool.query(sqlText, sqlValues)
+  .then(dbRes => res.sendStatus(200))
+  .catch(dbErr => {
+    console.log(`SQL Error in POST/api/gallery!`, dbErr)
+    res.sendStatus(500)
+  })
+})
 module.exports = router;
