@@ -7,6 +7,11 @@ export default function GalleryItem({ item, getGallery }) {
             .then(res => { getGallery() })
             .catch(err => { console.log(`Error in PUT/api/gallery/like/:id!`, err) })
     }
+    const handleDeleteButton = () => {
+        Axios.delete(`/api/gallery/${item.id}`)
+        .then(res => {getGallery()})
+        .catch(err => {console.log(`Error deleting iteM:`, err)})
+    }
 
     return (
         <>
@@ -17,6 +22,7 @@ export default function GalleryItem({ item, getGallery }) {
                         data-testid="toggle">{item.description}</p>
                     <p>Likes: {item.likes}</p>
                     <button data-testid="like" onClick={handleLikeButton}>Heart</button>
+                    <button onClick={handleDeleteButton}>Delete Item</button>
                 </div> : <div data-testid="galleryItem">
                     <p>{item.title}</p>
                     <img
@@ -25,6 +31,7 @@ export default function GalleryItem({ item, getGallery }) {
                         data-testid="toggle" />
                     <p>Likes: {item.likes}</p>
                     <button data-testid="like" onClick={handleLikeButton}>Heart</button>
+                    <button onClick={handleDeleteButton}>Delete Item</button>
                 </div>}
         </>
     )

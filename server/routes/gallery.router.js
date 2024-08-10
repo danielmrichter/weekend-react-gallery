@@ -41,4 +41,18 @@ router.post(`/`, (req, res) => {
     res.sendStatus(500)
   })
 })
+
+// DELETE /api/gallery
+router.delete(`/:id`, (req, res) => {
+  const sqlText = `DELETE FROM "gallery"
+    WHERE "id" = $1`
+  const sqlValues = [req.params.id]
+  pool.query(sqlText, sqlValues)
+  .then(dbRes => {res.sendStatus(200)})
+  .catch(dbErr => {
+    console.log(`Error in DELETE/api/gallery!`, dbErr)
+    res.sendStatus(500)
+  })
+})
+
 module.exports = router;
