@@ -19,7 +19,7 @@ router.put('/like/:id', (req, res) => {
 // GET /gallery
 router.get('/', (req, res) => {
   const sqlText = `SELECT * FROM "gallery"
-	                    ORDER BY "likes";`
+	                    ORDER BY "likes" desc;`
   pool.query(sqlText)
     .then(dbRes => res.send(dbRes.rows))
     .catch(dbErr => {

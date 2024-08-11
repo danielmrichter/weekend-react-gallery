@@ -22,7 +22,7 @@ export default function GalleryItem({ item, getGallery }) {
   const [isFavorited, setIsFavorited] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [isAwaitingConfirmation, setIsAwaitingConfirmation] = useState(false);
-  const [alertPopup, setAlertPopup] = useState(false)
+  const [alertPopup, setAlertPopup] = useState(false);
   // need state to track the successModal
 
   const handlePopover = (e) => {
@@ -33,8 +33,8 @@ export default function GalleryItem({ item, getGallery }) {
     Axios.delete(`/api/gallery/${item.id}`)
       .then((res) => {
         getGallery();
+        setAlertPopup(true);
         setIsAwaitingConfirmation(false);
-        setAlertPopup(true)
       })
       .catch((err) => {
         console.log(`Error deleting item:`, err);
@@ -143,18 +143,22 @@ export default function GalleryItem({ item, getGallery }) {
       </Dialog>
       <Snackbar
         open={alertPopup}
-        onClose={() => {setAlertPopup(false)}}
-        variant="filled"
+        onClose={() => {
+          setAlertPopup(false);
+        }}
         autoHideDuration={10000}
-        anchorOrigin={{horizontal: "right", vertical: "bottom"}}
+        anchorOrigin={{ horizontal: "center", vertical: "center" }}
       >
         <Alert
-          onClose={() => {setAlertPopup(false)}}
+          open={alertPopup}
+          onClose={() => {
+            setAlertPopup(false);
+          }}
           severity="success"
           variant="filled"
           sx={{ width: "100%" }}
         >
-          Successfully Deleted
+          Item Successfully deleted.
         </Alert>
       </Snackbar>
       {/* <UserConfirmDeleteModal
