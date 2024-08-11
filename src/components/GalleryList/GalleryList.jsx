@@ -1,18 +1,20 @@
-import { Box, Grid } from "@mui/material"
-import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import { Grid } from "@mui/material"
 import GalleryItem from "../GalleryItem/GalleryItem"
 
 export default function GalleryList({ gallery, getGallery }) {
     return (
         // <Box sx={{ display: "flex", flexDirection: 'row', justifyContent: 'space-between' }} data-testid="galleryList">
-        <Grid2 container={true} justifyContent="center" alignItems='baseline'
-            sx={{ bgcolor: 'primary.main' }} spacing={2}>
+        <Grid container={true} justifyContent="center" alignItems='baseline'
+            sx={{ mt: 5, ml: 0, py: 5}} 
+            spacing={3}
+            columnGap={3}
+            rowGap={2}>
             {gallery.map(item => <GalleryItem
                 key={item.id}
                 item={item}
                 getGallery={getGallery}
             />)}
-        </Grid2>
+        </Grid>
         // </Box>
     )
 }

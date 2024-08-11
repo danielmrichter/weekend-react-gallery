@@ -1,51 +1,169 @@
-import { Favorite, FavoriteBorder } from "@mui/icons-material";
-import { Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, IconButton, Paper, Typography } from "@mui/material";
+import { Delete, Favorite, FavoriteBorder } from "@mui/icons-material";
+import {
+  Alert,
+  Button,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardMedia,
+  Popover,
+  Snackbar,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Typography,
+} from "@mui/material";
 import Axios from "axios";
 import { useState } from "react";
 
-
 export default function GalleryItem({ item, getGallery }) {
-    const [flipImage, setFlipImage] = useState(false)
-    const [isFavorited, setIsFavorited] = useState(false)
+  const [popoverStatus, setPopoverStatus] = useState(false);
+  const [isFavorited, setIsFavorited] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isAwaitingConfirmation, setIsAwaitingConfirmation] = useState(false);
+  const [alertPopup, setAlertPopup] = useState(false)
+  // need state to track the successModal
 
-    const handleLikeButton = () => {
-        Axios.put(`/api/gallery/like/${item.id}`, { num: (isFavorited ? -1 : 1) })
-            .then(res => {
-                getGallery()
-                setIsFavorited(!isFavorited)
-            })
-            .catch(err => { console.log(`Error in PUT/api/gallery/like/:id!`, err) })
-    }
-    const handleDeleteButton = () => {
-        Axios.delete(`/api/gallery/${item.id}`)
-            .then(res => { getGallery() })
-            .catch(err => { console.log(`Error deleting iteM:`, err) })
-    }
+  const handlePopover = (e) => {
+    setPopoverStatus(!popoverStatus);
+    setAnchorEl(e.currentTarget);
+  };
+  const deleteItem = () => {
+    Axios.delete(`/api/gallery/${item.id}`)
+      .then((res) => {
+        getGallery();
+        setIsAwaitingConfirmation(false);
+        setAlertPopup(true)
+      })
+      .catch((err) => {
+        console.log(`Error deleting item:`, err);
+      });
+  };
 
-    const itemText = (
-        <>
-            <Typography>{item.title}</Typography>
-            <Typography>{item.description}</Typography>
-        </>)
-    const itemPicture = (
-        <CardMedia
-            component='img'
-            src={item.url}
-            loading="lazy"
-            alt={item.title}
-            sx={{
-                boxShadow: 3
-            }}
+  const handleLikeButton = () => {
+    Axios.put(`/api/gallery/like/${item.id}`, { num: isFavorited ? -1 : 1 })
+      .then((res) => {
+        getGallery();
+        setIsFavorited(!isFavorited);
+      })
+      .catch((err) => {
+        console.log(`Error in PUT/api/gallery/like/:id!`, err);
+      });
+  };
+
+  const itemText = (
+    <>
+      <Typography textAlign="center" fontWeight="bold">
+        {item.title}
+      </Typography>
+      <Typography>{item.description}</Typography>
+    </>
+  );
+  const itemPicture = (
+    <CardMedia
+      component="img"
+      src={item.url}
+      loading="lazy"
+      alt={item.title}
+      sx={{
+        boxShadow: 3,
+      }}
+    />
+  );
+  return (
+    <Card sx={{ maxWidth: 300 }} raised={true}>
+      <CardActionArea onClick={handlePopover} data-testid="toggle">
+        {itemPicture}
+      </CardActionArea>
+      <Popover
+        open={popoverStatus}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "center",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "center",
+          horizontal: "center",
+        }}
+        elevation={1}
+        onClose={() => {
+          setPopoverStatus(!popoverStatus);
+        }}
+      >
+        {itemText}
+      </Popover>
+      <CardActions>
+        {isFavorited ? (
+          <Favorite
+            data-testid="like"
+            onClick={handleLikeButton}
+            color="primary"
+          />
+        ) : (
+          <FavoriteBorder
+            data-testid="like"
+            onClick={handleLikeButton}
+            color="primary"
+          />
+        )}
+        <Typography>{item.likes}</Typography>
+        <Delete
+          onClick={() => {
+            setIsAwaitingConfirmation(true);
+          }}
         />
-    )
-    return (
-        <Card sx={{ maxWidth: 250 }} raised={true} data-testid="toggle" onClick={() => setFlipImage(!flipImage)}>
-            <CardActionArea>{itemPicture}</CardActionArea>
-            <CardActions>
-                {isFavorited ? <Favorite data-testid="like" onClick={handleLikeButton}/> : <FavoriteBorder data-testid="like" onClick={handleLikeButton}/>}
-                <Typography>{item.likes}</Typography>
-            </CardActions>
-            <Button variant='contained' onClick={handleDeleteButton}>Delete Item</Button>
-        </Card>
-    )
+      </CardActions>
+      <Dialog
+        open={isAwaitingConfirmation}
+        onClose={() => {
+          setIsAwaitingConfirmation(false);
+        }}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you would like to delete this item?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setIsAwaitingConfirmation(false);
+            }}
+          >
+            Disagree
+          </Button>
+          <Button onClick={deleteItem} autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Snackbar
+        open={alertPopup}
+        onClose={() => {setAlertPopup(false)}}
+        variant="filled"
+        autoHideDuration={10000}
+        anchorOrigin={{horizontal: "right", vertical: "bottom"}}
+      >
+        <Alert
+          onClose={() => {setAlertPopup(false)}}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Successfully Deleted
+        </Alert>
+      </Snackbar>
+      {/* <UserConfirmDeleteModal
+          onDeclineFn={() => {
+            setIsAwaitingConfirmation(false);
+          }}
+          onSuccessFn={onSuccessFn}
+          id={item.id}
+          isAwaitingConfirmation={isAwaitingConfirmation} /> */}
+    </Card>
+  );
 }
