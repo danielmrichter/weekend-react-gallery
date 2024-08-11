@@ -14,12 +14,11 @@ function App() {
     .catch(err => {console.log(`Error in GET/api/gallery!`, err)})
   }
     return (
-      <Container data-testid="app">
+      <Container data-testid="app" sx={{display: 'flex', flexDirection: "column", justifyContent: 'flex-start', alignItems: 'center', height: '100vh'}}>
         <header>
-          <Typography varient="h1" sx={{textAlign: 'center', color:'primary.main'}}>A Moody Gallery</Typography>
+          <Typography varient="h1" sx={{textAlign: 'center', mt: 5}}>A Moody Gallery</Typography>
         </header>
         <PostImageForm sx={{bgcolor: 'primary.secondary'}} getGallery={getGallery}/>
-        <Typography varient="h2">Gallery</Typography>
         <GalleryList gallery={gallery} getGallery={getGallery}/>
       </Container>
     );
