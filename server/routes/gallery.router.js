@@ -5,9 +5,9 @@ const pool = require('../modules/pool.js')
 // PUT /gallery/like/:id
 router.put('/like/:id', (req, res) => {
   const sqlText = `UPDATE "gallery"
-	                  SET "likes" = "likes" + 1
+	                  SET "likes" = "likes" + $2
                   	WHERE "id" = $1;`
-  const sqlValues = [req.params.id]
+  const sqlValues = [req.params.id, req.body.num]
   pool.query(sqlText, sqlValues)
   .then(dbRes => {res.sendStatus(200)})
   .catch(dbErr => {
