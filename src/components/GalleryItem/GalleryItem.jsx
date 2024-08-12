@@ -35,9 +35,9 @@ export default function GalleryItem({ item, getGallery }) {
       });
   };
   const onSuccessFnConfirmDelete = () => {
+    setAlertPopup(true);
     setIsAwaitingConfirmation(false);
     getGallery();
-    setAlertPopup(true);
   };
 
   const itemText = (
@@ -69,10 +69,13 @@ export default function GalleryItem({ item, getGallery }) {
         }}
         id={item.id}
       />
-      {/* <SuccessfulDeleteAlert
+      <SuccessfulDeleteAlert
         alertPopup={alertPopup}
-        setAlertPopup={setAlertPopup}
-      /> */}
+        onCloseFn={() => {
+          console.log(`Closing Alert!`);
+          setAlertPopup(false);
+        }}
+      />
       <Card sx={{ maxWidth: 300 }} raised={true}>
         <CardActionArea onClick={handlePopover} data-testid="toggle">
           {itemPicture}
