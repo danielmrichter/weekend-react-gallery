@@ -10,14 +10,13 @@ import {
 import Axios from "axios";
 import { useState } from "react";
 import ConfirmDeleteModal from "../Modals/ConfirmDeleteModal";
-import SuccessfulDeleteAlert from "../Modals/SuccessfulDeleteAlert";
 
-export default function GalleryItem({ item, getGallery }) {
+
+export default function GalleryItem({ item, getGallery, setAlertPopup }) {
   const [popoverStatus, setPopoverStatus] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [isAwaitingConfirmation, setIsAwaitingConfirmation] = useState(false);
-  const [alertPopup, setAlertPopup] = useState(false);
 
   const handlePopover = (e) => {
     setPopoverStatus(!popoverStatus);
@@ -68,13 +67,6 @@ export default function GalleryItem({ item, getGallery }) {
           setIsAwaitingConfirmation(false);
         }}
         id={item.id}
-      />
-      <SuccessfulDeleteAlert
-        alertPopup={alertPopup}
-        onCloseFn={() => {
-          console.log(`Closing Alert!`);
-          setAlertPopup(false);
-        }}
       />
       <Card sx={{ maxWidth: 300 }} raised={true}>
         <CardActionArea onClick={handlePopover} data-testid="toggle">

@@ -1,17 +1,11 @@
-import { Alert, Snackbar, SnackbarContent } from "@mui/material";
-import { useEffect } from "react";
+import { Alert, Snackbar } from "@mui/material";
 
 export default function SuccessfulDeleteAlert({ alertPopup, onCloseFn }) {
-  useEffect(() => {
-    console.log(`alertPopup status is: `, alertPopup);
-  }, []);
   return (
-    <Snackbar onClose={() => onCloseFn} open={alertPopup}>
-      <SnackbarContent>
-        <Alert severity="success">
+    <Snackbar onClose={onCloseFn} open={alertPopup} autoHideDuration={5000}>
+        <Alert severity="success" onClose={onCloseFn}>
           Item Successfully deleted.
         </Alert>
-      </SnackbarContent>
     </Snackbar>
   );
 }
