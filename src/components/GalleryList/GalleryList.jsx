@@ -3,7 +3,6 @@ import GalleryItem from "../GalleryItem/GalleryItem"
 
 export default function GalleryList({ gallery, getGallery }) {
     return (
-        // <Box sx={{ display: "flex", flexDirection: 'row', justifyContent: 'space-between' }} data-testid="galleryList">
         <Grid container={true} justifyContent="center" alignItems='baseline'
             sx={{ mt: 5, ml: 0, py: 5}} 
             spacing={3}
@@ -15,6 +14,5 @@ export default function GalleryList({ gallery, getGallery }) {
                 getGallery={getGallery}
             />)}
         </Grid>
-        // </Box>
     )
 }
